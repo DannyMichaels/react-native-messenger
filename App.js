@@ -24,6 +24,7 @@ const initialMessages = [
 export default function App() {
   const [messages, setMessages] = useState(initialMessages);
   const [fullscreenImageId, setFullscreenImageId] = useState(null);
+  const [isInputFocused, setIsInputFocused] = useState(false);
 
   const handlePressMessage = useCallback(
     (message) => {
@@ -53,23 +54,45 @@ export default function App() {
           break;
         case 'image':
           setFullscreenImageId(id);
+          setIsInputFocused(false);
           break;
         default:
           break;
       }
     },
-    [setMessages]
+    [setMessages, setFullscreenImageId, setIsInputFocused]
   );
 
   const dismissFullscreenImage = useCallback(() => {
     setFullscreenImageId(null);
+  }, [setFullscreenImageId]);
+
+  const handlePressToolbarCamera = useCallback(() => {}, []);
+
+  const handlePressToolbarLocation = useCallback(() => {}, []);
+
+  const handleChangeFocus = useCallback(
+    (newValue) => {
+      setIsInputFocused(newValue);
+    },
+    [setIsInputFocused]
+  );
+
+  const handleSubmit = useCallback((text) => {
+    setMessages((prevState) => [createTextMessage(text), ...prevState]);
   }, []);
 
   return (
     <View style={styles.container}>
       <Status />
       <MessageList messages={messages} onPressMessage={handlePressMessage} />
-      <Toolbar />
+      <Toolbar
+        isFocused={isInputFocused}
+        onChangeFocus={handleChangeFocus}
+        onSubmit={handleSubmit}
+        onPressCamera={handlePressToolbarCamera}
+        onPressLocation={handlePressToolbarLocation}
+      />
       <InputMethodEditor />
       <FullscreenImage
         messages={messages}
