@@ -10,6 +10,7 @@ import {
   createLocationMessage,
   createTextMessage,
 } from './utils/messageUtils';
+import useNativeGeoLocation from './hooks/useNativeGeoLocation';
 
 const initialMessages = [
   createImageMessage('https://unsplash.it/300/300'),
@@ -22,6 +23,7 @@ const initialMessages = [
 ];
 
 export default function App() {
+  const { geo } = useNativeGeoLocation();
   const [messages, setMessages] = useState(initialMessages);
   const [fullscreenImageId, setFullscreenImageId] = useState(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
@@ -69,7 +71,14 @@ export default function App() {
 
   const handlePressToolbarCamera = useCallback(() => {}, []);
 
-  const handlePressToolbarLocation = useCallback(() => {}, []);
+  const handlePressToolbarLocation = useCallback(() => {
+    Alert.alert('COORDS', `lat: ${geo.latitude}, long: ${geo.longitude}`, [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+    ]);
+  }, [geo]);
 
   const handleChangeFocus = useCallback(
     (newValue) => {
