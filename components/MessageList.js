@@ -15,7 +15,7 @@ export default function MessageList({ messages, onPressMessage = () => {} }) {
         <Message message={item} onPressMessage={onPressMessage} />
       )}
       keyExtractor={keyExtractor}
-      keyboardShouldPersistTaps="handled"
+      keyboardShouldPersistTaps="never"
     />
   );
 }

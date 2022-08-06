@@ -4,6 +4,7 @@ import InputMethodEditor from './components/InputMethodEditor';
 import MessageList from './components/MessageList';
 import Status from './components/Status';
 import Toolbar from './components/Toolbar';
+import FullscreenImage from './components/FullscreenImage';
 import {
   createImageMessage,
   createLocationMessage,
@@ -22,6 +23,7 @@ const initialMessages = [
 
 export default function App() {
   const [messages, setMessages] = useState(initialMessages);
+  const [fullscreenImageId, setFullscreenImageId] = useState(null);
 
   const handlePressMessage = useCallback(
     (message) => {
@@ -49,6 +51,9 @@ export default function App() {
             ]
           );
           break;
+        case 'image':
+          setFullscreenImageId(id);
+          break;
         default:
           break;
       }
@@ -56,13 +61,22 @@ export default function App() {
     [setMessages]
   );
 
+  const dismissFullscreenImage = useCallback(() => {
+    setFullscreenImageId(null);
+  }, []);
+
   return (
     <View style={styles.container}>
       <Status />
       <MessageList messages={messages} onPressMessage={handlePressMessage} />
       <Toolbar />
       <InputMethodEditor />
-      {/* <Button onPress={() => setMessages(initialMessages)} title="Reset" /> */}
+      <FullscreenImage
+        messages={messages}
+        fullscreenImageId={fullscreenImageId}
+        handleClose={dismissFullscreenImage}
+      />
+      <Button onPress={() => setMessages(initialMessages)} title="Reset" />
     </View>
   );
 }
