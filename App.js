@@ -11,6 +11,10 @@ import {
   createTextMessage,
 } from './utils/messageUtils';
 import useNativeGeoLocation from './hooks/useNativeGeoLocation';
+import MeasureLayout from './components/MeasureLayout';
+import KeyboardState from './components/KeyboardState';
+import MessagingContainer from './components/MessagingContainer';
+import { INPUT_METHOD } from './utils/constants';
 
 const initialMessages = [
   createImageMessage('https://unsplash.it/300/300'),
@@ -27,6 +31,7 @@ export default function App() {
   const [messages, setMessages] = useState(initialMessages);
   const [fullscreenImageId, setFullscreenImageId] = useState(null);
   const [isInputFocused, setIsInputFocused] = useState(false);
+  const [inputMethod, setInputMethod] = useState(INPUT_METHOD.NONE);
 
   const handlePressMessage = useCallback(
     (message) => {
@@ -69,7 +74,10 @@ export default function App() {
     setFullscreenImageId(null);
   }, [setFullscreenImageId]);
 
-  const handlePressToolbarCamera = useCallback(() => {}, []);
+  const handlePressToolbarCamera = useCallback(() => {
+    setIsInputFocused(false);
+    setInputMethod(INPUT_METHOD.CUSTOM);
+  }, []);
 
   const handlePressToolbarLocation = useCallback(() => {
     const { latitude, longitude } = geo;
@@ -101,24 +109,46 @@ export default function App() {
     [setMessages]
   );
 
+  const handleChangeInputMethod = useCallback(
+    (newValue) => {
+      setInputMethod(newValue);
+    },
+    [setInputMethod]
+  );
+
   return (
     <View style={styles.container}>
       <Status />
-      <MessageList messages={messages} onPressMessage={handlePressMessage} />
-      <Toolbar
-        isFocused={isInputFocused}
-        onChangeFocus={handleChangeFocus}
-        onSubmit={handleSubmit}
-        onPressCamera={handlePressToolbarCamera}
-        onPressLocation={handlePressToolbarLocation}
-      />
-      <InputMethodEditor handlePressImage={handlePressImage} />
+      <MeasureLayout>
+        {(layout) => (
+          <KeyboardState layout={layout}>
+            {(keyboardInfo) => (
+              <MessagingContainer
+                {...keyboardInfo}
+                inputMethod={inputMethod}
+                onChangeInputMethod={handleChangeInputMethod}
+                handlePressImage={handlePressImage}>
+                <MessageList
+                  messages={messages}
+                  onPressMessage={handlePressMessage}
+                />
+                <Toolbar
+                  isFocused={isInputFocused}
+                  onChangeFocus={handleChangeFocus}
+                  onSubmit={handleSubmit}
+                  onPressCamera={handlePressToolbarCamera}
+                  onPressLocation={handlePressToolbarLocation}
+                />
+              </MessagingContainer>
+            )}
+          </KeyboardState>
+        )}
+      </MeasureLayout>
       <FullscreenImage
         messages={messages}
         fullscreenImageId={fullscreenImageId}
         handleClose={dismissFullscreenImage}
       />
-      {/* <Button onPress={() => setMessages(initialMessages)} title="Reset" /> */}
     </View>
   );
 }

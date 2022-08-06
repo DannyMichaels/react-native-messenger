@@ -102,5 +102,5 @@ KeyboardState.propTypes = {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
   }).isRequired,
-  children: PropTypes.node.isRequired,
+  children: PropTypes.func.isRequired,
 };

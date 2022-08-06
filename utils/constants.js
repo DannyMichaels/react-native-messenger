@@ -1,0 +1,5 @@
+export const INPUT_METHOD = {
+  NONE: 'NONE',
+  KEYBOARD: 'KEYBOARD',
+  CUSTOM: 'CUSTOM',
+};
