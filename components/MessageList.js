@@ -1,16 +1,33 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { FlatList, StyleSheet } from 'react-native';
+import { MessageShape } from '../utils/messageUtils';
+import PropTypes from 'prop-types';
+import Message from './Message';
 
-export default function MessageList() {
+const keyExtractor = (message) => message.id.toString();
+
+export default function MessageList({ messages, onPressMessage = () => {} }) {
   return (
-    <View style={styles.content}>
-      <Text>MessageList</Text>
-    </View>
+    <FlatList
+      style={styles.container}
+      inverted // in a messaging app, we typically want new messages to appear at the bottom of the list, we use inverted to achieve that.
+      data={messages}
+      renderItem={({ item }) => (
+        <Message message={item} onPressMessage={onPressMessage} />
+      )}
+      keyExtractor={keyExtractor}
+      keyboardShouldPersistTaps="handled"
+    />
   );
 }
 
+MessageList.propTypes = {
+  messages: PropTypes.arrayOf(MessageShape).isRequired,
+  onPressMessage: PropTypes.func,
+};
+
 const styles = StyleSheet.create({
-  content: {
+  container: {
     flex: 1,
-    backgroundColor: '#fff',
+    overflow: 'visible',
   },
 });
