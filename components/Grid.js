@@ -1,11 +1,4 @@
-import {
-  View,
-  Text,
-  Dimensions,
-  FlatList,
-  PixelRatio,
-  StyleSheet,
-} from 'react-native';
+import { Dimensions, FlatList, PixelRatio, StyleSheet } from 'react-native';
 import PropTypes from 'prop-types';
 
 export default function Grid({
@@ -14,6 +7,7 @@ export default function Grid({
   keyExtractor,
   numColumns = 4,
   itemMargin = StyleSheet.hairlineWidth,
+  onEndReached,
 }) {
   renderGridItem = (info) => {
     const { index } = info;
@@ -42,12 +36,14 @@ export default function Grid({
       numColumns={numColumns}
       itemMargin={itemMargin}
       renderItem={renderGridItem}
+      onEndReached={onEndReached}
     />
   );
 }
 
 Grid.propTypes = {
   data: PropTypes.arrayOf(PropTypes.any),
+  onEndReached: PropTypes.func,
   renderItem: PropTypes.func.isRequired,
   keyExtractor: PropTypes.func,
   numColumns: PropTypes.number,

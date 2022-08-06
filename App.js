@@ -94,6 +94,13 @@ export default function App() {
     setMessages((prevState) => [createTextMessage(text), ...prevState]);
   }, []);
 
+  const handlePressImage = useCallback(
+    (uri) => {
+      setMessages((prevState) => [createImageMessage(uri), ...prevState]);
+    },
+    [setMessages]
+  );
+
   return (
     <View style={styles.container}>
       <Status />
@@ -105,13 +112,13 @@ export default function App() {
         onPressCamera={handlePressToolbarCamera}
         onPressLocation={handlePressToolbarLocation}
       />
-      <InputMethodEditor />
+      <InputMethodEditor handlePressImage={handlePressImage} />
       <FullscreenImage
         messages={messages}
         fullscreenImageId={fullscreenImageId}
         handleClose={dismissFullscreenImage}
       />
-      <Button onPress={() => setMessages(initialMessages)} title="Reset" />
+      {/* <Button onPress={() => setMessages(initialMessages)} title="Reset" /> */}
     </View>
   );
 }
