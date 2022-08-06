@@ -72,13 +72,16 @@ export default function App() {
   const handlePressToolbarCamera = useCallback(() => {}, []);
 
   const handlePressToolbarLocation = useCallback(() => {
-    Alert.alert('COORDS', `lat: ${geo.latitude}, long: ${geo.longitude}`, [
-      {
-        text: 'Cancel',
-        style: 'cancel',
-      },
+    const { latitude, longitude } = geo;
+
+    setMessages((prevState) => [
+      createLocationMessage({
+        latitude,
+        longitude,
+      }),
+      ...prevState,
     ]);
-  }, [geo]);
+  }, [geo, setMessages]);
 
   const handleChangeFocus = useCallback(
     (newValue) => {
