@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { Image, StyleSheet, TouchableOpacity } from 'react-native';
-
 import Grid from './Grid';
 import * as MediaLibrary from 'expo-media-library';
 
@@ -28,13 +27,12 @@ export default function ImageGrid({ onPressImage = () => {} }) {
 
   const getImages = useCallback(
     async (after) => {
-      // if (isLoading) return;
       try {
         setIsLoading(true);
 
         if (status?.status === 'undetermined') {
           const response = await requestPermission();
-
+          console.log('Camera roll permission undetermined');
           if (!response.granted) {
             console.log('Camera roll permission denied');
             return;
@@ -54,7 +52,7 @@ export default function ImageGrid({ onPressImage = () => {} }) {
           });
 
         setImages(
-          (prevState) => [...new Set([...prevState, ...assets])],
+          (prevState) => [...prevState, ...assets],
           () => {
             setIsLoading(false);
             setCursor(hasNextPage ? endCursor : null);
@@ -67,20 +65,28 @@ export default function ImageGrid({ onPressImage = () => {} }) {
         setIsLoading(false);
       }
     },
-    [isLoading, status]
+    [status]
   );
 
   const getNextImages = useCallback(() => {
     if (!cursor) return;
 
-    getImages(cursor);
+    if (!isLoading) {
+      getImages(cursor);
+    }
   }, [getImages, cursor]);
 
   useEffect(() => {
     getImages();
-  }, []);
+  }, [getImages]);
 
-  const renderItem = ({ item: { uri }, size, marginTop, marginLeft }) => {
+  const renderItem = ({
+    item: { uri },
+    size,
+    marginTop,
+    marginLeft,
+    index,
+  }) => {
     const style = {
       width: size,
       height: size,
@@ -90,7 +96,7 @@ export default function ImageGrid({ onPressImage = () => {} }) {
 
     return (
       <TouchableOpacity
-        key={uri}
+        key={index}
         activeOpacity={0.75}
         onPress={() => onPressImage(uri)}
         style={style}>
