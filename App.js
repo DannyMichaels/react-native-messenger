@@ -119,7 +119,7 @@ export default function App() {
   return (
     <View style={styles.container}>
       <Status />
-      <MeasureLayout>
+      {/* <MeasureLayout>
         {(layout) => (
           <KeyboardState layout={layout}>
             {(keyboardInfo) => (
@@ -143,7 +143,17 @@ export default function App() {
             )}
           </KeyboardState>
         )}
-      </MeasureLayout>
+      </MeasureLayout> */}
+
+      <MessageList messages={messages} onPressMessage={handlePressMessage} />
+      <Toolbar
+        isFocused={isInputFocused}
+        onChangeFocus={handleChangeFocus}
+        onSubmit={handleSubmit}
+        onPressCamera={handlePressToolbarCamera}
+        onPressLocation={handlePressToolbarLocation}
+      />
+      <InputMethodEditor handlePressImage={handlePressImage} />
       <FullscreenImage
         messages={messages}
         fullscreenImageId={fullscreenImageId}

@@ -53,7 +53,7 @@ export default function MessagingContainer({
       LayoutAnimation.Properties.opacity
     );
     LayoutAnimation.configureNext(anim);
-  }, [onChangeInputMethod]);
+  });
 
   useEffect(() => {
     subscriptionRef.current = BackHandler.addEventListener(
