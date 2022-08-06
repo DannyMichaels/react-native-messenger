@@ -10,6 +10,7 @@
     "eject": "expo eject"
   },
   "dependencies": {
+    "@react-native-community/cameraroll": "^4.1.2",
     "@react-native-community/netinfo": "^9.0.0",
     "expo": "~45.0.0",
     "expo-constants": "~13.1.1",

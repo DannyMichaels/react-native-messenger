@@ -1,9 +1,10 @@
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
+import ImageGrid from './ImageGrid';
 
 export default function InputMethodEditor() {
   return (
     <View style={styles.inputMethodEditor}>
-      <Text>InputMethodEditor</Text>
+      <ImageGrid />
     </View>
   );
 }
